@@ -27,6 +27,7 @@ def check_collision(positions, x, y, obj_largura, obj_comprimento, spacing):
     return False  # Retorna False se não houver colisão
 
 # Função para distribuir objetos em um espaço dado
+# Função para distribuir objetos em um espaço dado
 def distribute_objects(largura, comprimento):
     all_objects = [
         ((0.5, 0.5), "Trufa"),        # Objeto 1
@@ -50,7 +51,7 @@ def distribute_objects(largura, comprimento):
         ((0.5, 1.5), "Caixa 12"),     # Objeto 19
         ((1, 2.8), "Caixa Grande 5")  # Objeto 20
     ]
-
+    
     positions = []  # Lista para armazenar as posições dos objetos
     spacing = 0.05  # Espaçamento entre os objetos
     vitrine_spacing = 0.1  # Espaçamento reservado para a vitrine
@@ -58,10 +59,10 @@ def distribute_objects(largura, comprimento):
     # Garantir que o objeto "balcão" esteja sempre presente e seja o primeiro a ser distribuído
     selected_objects = [obj for obj in all_objects if obj[1] == "balcão"]
     selected_objects.extend(random.sample([obj for obj in all_objects if obj[1] != "balcão"], 4))
-
+    
     while len(selected_objects) < 20:
         selected_objects.append(random.choice(all_objects))  # Adiciona objetos aleatórios até ter 20 objetos selecionados
-
+    
     # Priorizar a escolha de objetos que proporcionem a maior quantidade ao longo do perímetro
     selected_objects.sort(key=lambda x: (2 * (largura // x[0][0] + comprimento // x[0][1])), reverse=True)
     random.shuffle(selected_objects)  # Embaralha a lista de objetos selecionados
@@ -73,7 +74,7 @@ def distribute_objects(largura, comprimento):
     # Definir a posição do balcão garantindo uma distância de 0.4 metros das bordas
     balcão_largura, balcão_comprimento = balcão[0]
     x_balcao, y_balcao = 0.4, 0.4
-
+    
     positions.append((x_balcao, y_balcao, balcão_largura, balcão_comprimento, balcão[1]))
 
     # Ajustar a posição inicial para a distribuição dos outros objetos
@@ -91,7 +92,7 @@ def distribute_objects(largura, comprimento):
                     if y + comprimento_max + vitrine_spacing <= comprimento:  # Verifica a linha da vitrine
                         positions.append((x, y, largura_max, comprimento_max, label))
             x += largura_max + spacing
-
+        
     x, y = 0, y_balcao + balcão_comprimento + spacing
     for i, ((obj_largura, obj_comprimento), nome) in enumerate(selected_objects[len(positions):]):
         largura_max = min(obj_largura, obj_comprimento)
@@ -106,7 +107,7 @@ def distribute_objects(largura, comprimento):
                     if y + comprimento_max + vitrine_spacing <= comprimento:  # Verifica a linha da vitrine
                         positions.append((x, y, largura_max, comprimento_max, label))
             y += comprimento_max + spacing
-
+    
     x, y = largura, y_balcao + balcão_comprimento + spacing
     for i, ((obj_largura, obj_comprimento), nome) in enumerate(selected_objects[len(positions):]):
         largura_max = min(obj_largura, obj_comprimento)
@@ -121,7 +122,7 @@ def distribute_objects(largura, comprimento):
                     if y + comprimento_max + vitrine_spacing <= comprimento:  # Verifica a linha da vitrine
                         positions.append((x - largura_max, y, largura_max, comprimento_max, label))
             y += comprimento_max + spacing
-
+    
     x, y = largura, comprimento
     for i, ((obj_largura, obj_comprimento), nome) in enumerate(selected_objects[len(positions):]):
         largura_max = max(obj_largura, obj_comprimento)
@@ -138,6 +139,7 @@ def distribute_objects(largura, comprimento):
             x -= largura_max + spacing
 
     return positions  # Retorna a lista de posições dos objetos
+
 
 # Função para plotar o layout
 def plot_layout(largura, comprimento, positions, category, area):
@@ -183,7 +185,7 @@ def main():
     comprimento = float(input("Insira o comprimento em metros: "))
 
     area = calculate_area(largura, comprimento)
-
+    
     # Lista para armazenar as posições e categorias de cada distribuição
     all_positions = []
     all_categories = []
@@ -194,7 +196,7 @@ def main():
         category = classify_category(len(positions))
         all_positions.append(positions)
         all_categories.append(category)
-
+    
     # Plotar as três distribuições diferentes
     for i in range(3):
         print(f"\nDistribuição {i+1}:")
@@ -202,5 +204,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#distribuição otimizada
